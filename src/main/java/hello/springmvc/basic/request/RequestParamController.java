@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,17 +30,17 @@ public class RequestParamController {
     @RequestMapping("/request-param-v2")
     public String requestParamV2(
             @RequestParam("username") String memberName, //요청 파라미터 애노테이션 사용
-            @RequestParam("age") int memberAge){
+            @RequestParam("age") int memberAge) {
 
-            log.info("username={}, age={}", memberName, memberAge);
-            return "ok"; //html body에 출력
+        log.info("username={}, age={}", memberName, memberAge);
+        return "ok"; //html body에 출력
     }
 
     @ResponseBody
     @RequestMapping("/request-param-v3")
     public String requestParamV3(
             @RequestParam String username, // http 파라미터 이름이 변수이름과 같으면 () 생략가능
-            @RequestParam int age){
+            @RequestParam int age) {
 
         log.info("username={}, age={}", username, age);
         return "ok";
@@ -46,7 +48,7 @@ public class RequestParamController {
 
     @ResponseBody
     @RequestMapping("/request-param-v4")
-    public String requestParamV4(String username, int age){ // String, int, Integer 등 단순 타입이면 @RequestParam 생략가능
+    public String requestParamV4(String username, int age) { // String, int, Integer 등 단순 타입이면 @RequestParam 생략가능
         log.info("username={}, age={}", username, age);
         return "ok";
     }
@@ -55,9 +57,9 @@ public class RequestParamController {
     @RequestMapping("/request-param-required")
     public String requestParamRequired(
             @RequestParam String username,
-            @RequestParam(required = false) Integer age){ //@RequestParam(required = false) 생략가능 =null처리.
-                                                        //기본형인 int에는 null이 들어갈 수 없기에 객체형인 Integer 선언
-                                                        // null은 못들어가나, 빈문자("")는 들어갈 수 있다
+            @RequestParam(required = false) Integer age) { //@RequestParam(required = false) 생략가능 =null처리.
+        //기본형인 int에는 null이 들어갈 수 없기에 객체형인 Integer 선언
+        // null은 못들어가나, 빈문자("")는 들어갈 수 있다
         log.info("username={}, age={}", username, age);
         return "ok";
     }
@@ -66,7 +68,7 @@ public class RequestParamController {
     @RequestMapping("/request-param-default")
     public String requestParamDefault(
             @RequestParam(defaultValue = "guest") String username, //기본값을 적용해주는 defaultValue를 쓰면 required는 의미가 없다.
-            @RequestParam(defaultValue = "-1") int age){            //빈문자인경우에도 기본값 적용
+            @RequestParam(defaultValue = "-1") int age) {            //빈문자인경우에도 기본값 적용
         log.info("username={}, age={}", username, age);
         return "ok";
     }
@@ -75,6 +77,20 @@ public class RequestParamController {
     @RequestMapping("/request-param-map")
     public String requestParamMap(@RequestParam Map<String, Object> paramMap) { //파라미터의 값이 1개가 확실하다면 Map, 그렇지않다면 MultiValueMap 사용
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) { //기존의 변수 생성해서 setXxx 하는 작업들을 생략해준다
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) { //@ModelAttribute 생략가능
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
         return "ok";
     }
 }
